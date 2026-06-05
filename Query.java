@@ -9,6 +9,10 @@ public class Query {
         database.getConnection();
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<String> getAllInvestors() {
         String query = "SELECT InvestorID, FirstName, LastName FROM INVESTOR";
         ArrayList<String> investors = new ArrayList<>();
@@ -34,6 +38,10 @@ public class Query {
         return investors;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<String> getAllIndustries() {
         String query = "SELECT DISTINCT Industry FROM COMPANY ORDER BY Industry";
         ArrayList<String> industries = new ArrayList<>();
@@ -55,6 +63,13 @@ public class Query {
         return industries;
     }
 
+    /**
+     * 
+     * @param investorChoice
+     * @param tradeType
+     * @param sortOption
+     * @return
+     */
     public Object[][] getTransactionsByInvestor(String investorChoice, String tradeType, String sortOption) {
         ArrayList<Object[]> rows = new ArrayList<>();
 
@@ -112,6 +127,12 @@ public class Query {
         return rows.toArray(new Object[0][]);
     }
 
+    /**
+     * 
+     * @param industry
+     * @param topN
+     * @return
+     */
     public Object[][] getTopStocksByVolume(String industry, String topN) {
         ArrayList<Object[]> rows = new ArrayList<>();
 

@@ -1,0 +1,99 @@
+DROP DATABASE IF EXISTS stock_system;
+CREATE DATABASE stock_system;
+
+USE stock_system;
+
+-- Tables Creation
+
+-- CREATE INVESTOR TABLE
+CREATE TABLE INVESTOR(InvestorID INT PRIMARY KEY AUTO_INCREMENT, FirstName VARCHAR(25) NOT NULL, LastName VARCHAR(25) NOT NULL, Email VARCHAR(30) NOT NULL, PhoneNumber VARCHAR(12));
+
+-- CREATE BROKERAGEACCOUNT TABLE
+CREATE TABLE BROKERAGEACCOUNT(AccountID INT PRIMARY KEY AUTO_INCREMENT, InvestorID INT NOT NULL, AccountType VARCHAR(35) NOT NULL, BrokerName VARCHAR(35) NOT NULL, Balance DECIMAL(10, 2) NOT NULL);
+
+-- CREATE COMPANY TABLE
+CREATE TABLE COMPANY(CompanyID INT PRIMARY KEY AUTO_INCREMENT, CompanyName VARCHAR(35) NOT NULL, Industry VARCHAR(35) NOT NULL, Headquarters varchar(55) NOT NULL, FoundedYear YEAR);
+
+-- CREATE STOCK TABLE
+CREATE TABLE STOCK(StockID INT PRIMARY KEY AUTO_INCREMENT, CompanyID INT NOT NULL, TickerSymbol VARCHAR(10) NOT NULL, ExchangeName VARCHAR(50) NOT NULL, CurrentPrice Decimal(10, 2) NOT NULL);
+
+-- CREATE TRADETRANSACTION TABLE
+CREATE TABLE TRADETRANSACTION(TransactionID INT PRIMARY KEY UNIQUE AUTO_INCREMENT, AccountID INT NOT NULL, StockID INT NOT NULL, TradeDate DATE NOT NULL, TradeType ENUM('BUY', 'SELL') NOT NULL, Quantity INT NOT NULL, PricePerShare DECIMAL(10,2) NOT NULL);
+
+-- Alter Tables
+
+-- ALTER BROKERAGEACCOUNT TABLE
+ALTER TABLE BROKERAGEACCOUNT ADD CONSTRAINT fk_investor_id FOREIGN KEY (InvestorID) REFERENCES INVESTOR(InvestorID);
+
+-- ALTER STOCK TABLE
+ALTER TABLE STOCK ADD CONSTRAINT fk_company_id FOREIGN KEY (CompanyID) REFERENCES COMPANY(CompanyID);
+
+-- ALTER TRADETRANSACTION TABLE
+ALTER TABLE TRADETRANSACTION 
+ADD CONSTRAINT fk_account_id FOREIGN KEY (AccountID) REFERENCES BROKERAGEACCOUNT(AccountID),
+ADD CONSTRAINT fk_stock_id FOREIGN KEY (StockID) REFERENCES STOCK(StockID);
+
+-- Select Tables
+
+-- SELECT INVESTOR TABLE
+SELECT * FROM INVESTOR;
+DESCRIBE INVESTOR;
+
+-- SELECT BROKERAGEACCOUNT TABLE
+SELECT * FROM BROKERAGEACCOUNT;
+DESCRIBE BROKERAGEACCOUNT;
+
+-- SELECT COMPANY TABLE
+SELECT * FROM COMPANY;
+DESCRIBE COMPANY;
+
+-- SELECT STOCK TABLE
+SELECT * FROM STOCK;
+DESCRIBE STOCK;
+
+-- SELECT TRADETRANSACTION TABLE
+SELECT * FROM TRADETRANSACTION;
+DESCRIBE TRADETRANSACTION;
+
+-- Insert Data Into Tables
+
+-- INVESTOR TABLE
+INSERT INTO INVESTOR(FirstName, LastName, Email, PhoneNumber) VALUES
+('John', 'Smith', 'john.smith@email.com', '425-555-1001'),
+('Sarah', 'Johnson', 'sarah.j@email.com', '206-555-1002'),
+('Michael', 'Brown', 'mbrown@email.com', '253-555-1003'),
+('Emily', 'Davis', 'emily.d@email.com', '360-555-1004'),
+('David', 'Wilson', 'dwilson@email.com', '509-555-1005');
+
+-- BROKERAGEACCOUNT TABLE
+INSERT INTO BROKERAGEACCOUNT (InvestorID, AccountType, BrokerName, Balance) VALUES
+(1, 'Individual', 'Fidelity', 15000.50),
+(2, 'Retirement IRA', 'Charles Schwab', 42000.75),
+(3, 'Individual', 'Robinhood', 8200.00),
+(4, 'Joint Account', 'E-Trade', 27500.25),
+(5, 'Individual', 'Vangaurd', 18750.90);
+
+-- COMPANY TABLE
+INSERT INTO COMPANY (CompanyName, Industry, Headquarters, FoundedYear) VALUES
+('Apple', 'Technology', 'Cupertino, California', 1976),
+('Microsoft', 'Technology', 'Redmond, Washington', 1975),
+('Tesla', 'Automotive', 'Austin, Texas', 2003),
+('Amazon', 'E-Commerce', 'Seattle, Washington', 1994),
+('NVIDIA', 'Technology', 'Santa Clara, California', 1992);
+
+-- STOCK TABLE
+INSERT INTO STOCK (CompanyID, TickerSymbol, ExchangeName, CurrentPrice) VALUES
+(1, 'AAPL', 'NASDAQ', 215.34),
+(2, 'MSFT', 'NASDAQ', 452.18),
+(3, 'TSLA', 'NASDAQ', 198.65),
+(4, 'AMZN', 'NASDAQ', 189.72),
+(5, 'NVDA', 'NASDAQ', 142.85);
+
+-- TRADETRANSACTION TABLE
+INSERT INTO TRADETRANSACTION (AccountID, StockID, TradeDate, TradeType, Quantity, PricePerShare) VALUES
+(1, 1, '2026-01-10', 'BUY', 50, 210.00),
+(2, 2, '2026-01-15', 'BUY', 25, 445.50),
+(3, 3, '2026-02-01', 'SELL', 10, 205.75),
+(4, 4, '2026-02-12', 'BUY', 30, 185.25),
+(5, 5, '2026-03-05', 'BUY', 50, 142.85);
+
